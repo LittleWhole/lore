@@ -99,8 +99,9 @@
       // Another simple check, compares the message author id to the one stored in the config file.
       check: (message) => message.client.config.ownerID === message.author.id
     }
-  ]
+  ],
   "color": "#910c88",
   "version": "alpha v0.1.0"
 };
 module.exports = config;
+}
