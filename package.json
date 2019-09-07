@@ -7,7 +7,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "discord.js": "github:hydrabolt/discord.js#master"
+    "discord.js": "github:discordjs/discord.js#master"
   },
   "engines": {
     "node": "12.x"
