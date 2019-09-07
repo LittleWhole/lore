@@ -1,0 +1,18 @@
+{
+  "name": "lore",
+  "version": "0.1.0-alpha",
+  "description": "Lore bot for The Dark Crystal Wiki",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "repository": {
+    "url": "https://github.com/LittleWhole/lore"
+  },
+  "license": "MIT"
+}
