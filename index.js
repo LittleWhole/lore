@@ -1,59 +1,55 @@
-// Discord
+// Loading libraries
 const Discord = require("discord.js");
-const client = new Discord.Client({ fetchAllMembers: true });
+const { promisify } = require("util");
+const readdir = promisify(require("fs").readdir);
+const Enmap = require("enmap");
 
-// Config + fs library
-const config = require("./config.json");
-const fs = require("fs");
+const client = new Discord.Client();
 
-// Load commands
-client.commands = new Discord.Collection();
-fs.readdir("./commands/", (err, files) => {
-  if (err) console.error(err);
-  files.forEach(file => {
-    let props = require(`./commands/${file}`);
-    client.commands.set(props.help.name, props);
+// Load config
+client.config = require("./config.js");
+
+// Require our logger
+client.logger = require("./modules/Logger");
+
+// Modules (credits to GuideBot)
+require("./modules/functions.js")(client);
+
+// Aliases and commands are put in collections where they can be read from,
+// catalogued, listed, etc.
+client.commands = new Enmap();
+client.aliases = new Enmap();
+
+// Enmap
+client.settings = new Enmap({name: "settings"});
+
+const init = async () => {
+  // Load commands
+  const cmdFiles = await readdir("./commands/");
+  client.logger.log(`Loading a total of ${cmdFiles.length} commands.`);
+  cmdFiles.forEach(f => {
+    if (!f.endsWith(".js")) return;
+    const response = client.loadCommand(f);
+    if (response) console.log(response);
   });
-});
 
-// Load events
-fs.readdir("./events/", (err, eventFiles) => {
-  if (err) console.error(err);
-  eventFiles.forEach(file => {
+  // Load events
+  const evtFiles = await readdir("./events/");
+  client.logger.log(`Loading a total of ${evtFiles.length} events.`);
+  evtFiles.forEach(file => {
     const eventName = file.split(".")[0];
+    client.logger.log(`Loading Event: ${eventName}`);
     const event = require(`./events/${file}`);
-    event(client, config);
-    delete require.cache[require.resolve(`./events/${file}`)];
+    client.on(eventName, event.bind(null, client));
   });
-});
 
-client.on("error", console.error);
-client.on("warn", console.warn);
-
-client.login(config.token);
-
-client.reload = command => {
-  return new Promise((resolve, reject) => {
-    try {
-      delete require.cache[require.resolve(`./commands/${command}`)];
-      let cmd = require(`./commands/${command}`);
-      client.commands.delete(command);
-      client.commands.set(command, cmd);
-      resolve();
-    } catch (e){
-      reject(e);
-    }
-  });
+  // Generate a cache of client permissions for pretty perm names in commands.
+  client.levelCache = {};
+  for (let i = 0; i < client.config.permLevels.length; i++) {
+    const thisLevel = client.config.permLevels[i];
+    client.levelCache[thisLevel.name] = thisLevel.level;
+  }
+  client.login(client.config.token);
 };
 
-client.permissions = (message, override) => {
-  if (override) return override;
-  let permLevel;
-  if (permLevel >= 10) return permLevel;
-  permLevel = 0; // Member
-  if (message.member.hasPermission('MANAGE_ROLES')) permLevel = 1; // Moderator
-  if (message.member.hasPermission('ADMINISTRATOR')) permLevel = 2; // Admin
-  if (message.author.id === "230880116035551233") permLevel = 99; // Developer
-  return permLevel;
-};
-
+init();
