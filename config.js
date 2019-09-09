@@ -11,6 +11,8 @@
 
   // Your Bot's Token. Available on https://discordapp.com/developers/applications/me
   "token": process.env.SECRET,
+    
+  "prefix": "!",
 
   // Default per-server settings. New guilds have these settings. 
 
