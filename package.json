@@ -9,12 +9,13 @@
   "dependencies": {
     "discord.js": "github:discordjs/discord.js#master",
     "chalk": "^2.4.2",
-    "enmap": "^5.0.0",
+    "enmap": "^5.1.0",
     "moment": "^2.24.0",
     "moment-duration-format": "^2.3.2",
-    "ms": "^2.1.1",
+    "ms": "^2.1.2",
     "os": "^0.1.1",
-    "better-sqlite3": "^5.4.0"
+    "better-sqlite3": "^5.4.3",
+    "core-worker": "^0.3.5"
   },
   "engines": {
     "node": "12.x"
