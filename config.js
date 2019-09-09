@@ -10,7 +10,7 @@
   "support": [],
 
   // Your Bot's Token. Available on https://discordapp.com/developers/applications/me
-  "token": "Redacted from GitHub",
+  "token": process.env.SECRET,
 
   // Default per-server settings. New guilds have these settings. 
 
