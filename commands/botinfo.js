@@ -3,7 +3,7 @@ const ms = require('ms');
 const os = require('os');
 const worker = require("core-worker");
 
-exports.run = async (client, message, command, args, level) => {
+exports.run = async (client, message, args, level) => {
     const npmv = await worker.process("npm -v").death();
     let stats = new Discord.MessageEmbed()
     .setTitle("`Lore Statistics`")
@@ -20,7 +20,7 @@ exports.run = async (client, message, command, args, level) => {
     .addField("Node Version", process.version, true)
     .addField("NPM Version", npmv.data.replace("\n", ""), true)
     .addField('OS', `${os.platform()} (${process.arch})`, true)
-    .setColor(0xf47442)
+    .setColor(message.settings.color)
     .setTimestamp();
     message.channel.send({ embed: stats })  
 };
@@ -29,7 +29,7 @@ exports.run = async (client, message, command, args, level) => {
       enabled: true,
       guildOnly: false,
       aliases: [],
-      permLevel: 0
+      permLevel: "User"
     };
     
     exports.help = {

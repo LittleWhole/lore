@@ -23,7 +23,7 @@ exports.run = (client, message, args, level) => {
         .setTitle("Evaluated successfully")
         .addField("Input:", `\`\`\`JavaScript\n${code}\`\`\``, true)
         .addField("Output:", `\`\`\`JavaScript\n${evaled}\`\`\``, true)
-        .setColor(config.color)
+        .setColor(message.settings.color)
         .setFooter("Lore Eval")
         .setTimestamp();
 
@@ -46,7 +46,7 @@ exports.conf = {
     enabled: true,
     guildOnly: false,
     aliases: [],
-    permLevel: 10
+    permLevel: "Bot Owner"
 }
 
 exports.help = {
