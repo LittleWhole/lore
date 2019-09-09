@@ -5,6 +5,6 @@
    
 module.exports = async (client, message) => {
   if (message.channel.id === "620576094772396044") {
-    console.log("Super bad error happened. Please fix this promptly. All reactions were removed from a RoleMenu.");
+    client.logger.log("Super bad error happened. Please fix this promptly. All reactions were removed from a RoleMenu.");
   }
 }
