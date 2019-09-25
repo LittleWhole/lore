@@ -15,7 +15,8 @@
     "ms": "^2.1.2",
     "os": "^0.1.1",
     "better-sqlite3": "^5.4.3",
-    "core-worker": "^0.3.5"
+    "core-worker": "^0.3.5",
+    "express": "^4.16.4"
   },
   "engines": {
     "node": "12.x"
