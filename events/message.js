@@ -3,12 +3,45 @@
 // goes `client, other, args` when this function is run.
 
 module.exports = async (client, message) => {
-  // It's good practice to ignore other bots. This also makes your bot ignore itself
-  // and not get into a spam loop (we call that "botception").
+  function getRandomIntPlusOne(max) {
+    return Math.floor(Math.random() * Math.floor(max)) + 1;
+  }
+  var sql = client.dependencies.sql;
+  var Discord = client.dependencies.discord;
   if (message.author.bot) return;
+  
+    // Stats - xp level, credits, messages, etc.
+  if (message.guild) {
+    let score = client.getScore.get(message.author.id, message.guild.id);
+    if (!score) {
+      score = {
+        id: `${message.guild.id}-${message.author.id}`,
+        user: message.author.id,
+        guild: message.guild.id,
+        points: 0,
+        level: 1
+      }
+    }
+    
+    let chance = getRandomIntPlusOne(100);
+    if (chance <= 40) score.points++;
+    console.log(chance);
+    
+    const curLevel = Math.floor(0.1 * Math.sqrt(score.points)) + 1;
+    
+    // Leveling up
+    if(score.level < curLevel) {
+      score.level++;
+      let embed = new Discord.MessageEmbed()
+      .setTitle("Level up!")
+      .setDescription(`${message.author}, you've reached level ${score.level}!`)
+      .setColor(client.config.color)
+      .setTimestamp();
+      message.channel.send({ embed: embed });
+    }
+    client.setScore.run(score);
+  }
 
-  // Grab the settings for this server from Enmap.
-  // If there is no guild, get default conf (DMs)
   const settings = message.settings = client.config;
 
   // Checks if the bot was mentioned, with no message after it, returns the prefix.
@@ -17,14 +50,8 @@ module.exports = async (client, message) => {
     return message.reply(`My prefix on this guild is \`${settings.prefix}\``);
   }
 
-  // Also good practice to ignore any message that does not start with our prefix,
-  // which is set in the configuration file.
   if (message.content.indexOf(settings.prefix) !== 0) return;
 
-  // Here we separate our "command" name, and our "arguments" for the command.
-  // e.g. if we have the message "+say Is this the real life?" , we'll get the following:
-  // command = say
-  // args = ["Is", "this", "the", "real", "life?"]
   const args = message.content.slice(settings.prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
 
