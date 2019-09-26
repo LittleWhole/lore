@@ -24,7 +24,7 @@ module.exports = async (client, message) => {
     }
     
     let chance = getRandomIntPlusOne(100);
-    if (chance <= 40) score.points++;
+    if (chance <= 75) score.points++;
     console.log(chance);
     
     const curLevel = Math.floor(0.1 * Math.sqrt(score.points)) + 1;
